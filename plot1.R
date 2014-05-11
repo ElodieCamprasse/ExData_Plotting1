@@ -1,0 +1,12 @@
+data<-read.table("household_power_consumption.txt", sep=";")
+subset1<-subset(data, V1== "1/2/2007")
+subset2<-subset(data, V1== "2/2/2007")
+subsets<-rbind(subset1, subset2)
+new_data<-within(subsets, { Date_time=paste(V1, V2) })
+new_data_OK<-within(new_data, { Date_time<-strptime(Date_time, format= "%d/%m/%Y %H:%M:%S") })
+head(new_data_OK)
+tail(new_data_OK)
+
+hist(as.numeric(type.convert(as.character(new_data_OK$V3), dec = ".")), col= 'red', main = "Global Active Power", xlab="Global Active Power (kilowatts)")
+dev.copy(png, file = "plot1.png", width = 480, height = 480)
+dev.off()
